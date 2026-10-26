@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>⚡ Dark Power</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09090d;
+  --card:#12121a;
+  --card2:#181824;
+  --line:#272738;
+  --tx:#f2f2f7;
+  --mut:#8e8ea6;
+  --ac:#ffd700;
+  --ac2:#ffe600;
+  --ac-tx:#09090d;
+  --danger:#f43f5e;
+  --r:16px;
+}
+[data-theme=light]{
+  --bg:#f4f4f9;
+  --card:#ffffff;
+  --card2:#ececf4;
+  --line:#dcdce8;
+  --tx:#111118;
+  --mut:#64647a;
+  --ac:#d9a400;
+  --ac2:#b8860b;
+  --ac-tx:#ffffff;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Cairo,system-ui,sans-serif;line-height:1.6}
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 14px}
+.bar{display:flex;gap:8px;align-items:center;max-width:760px;margin:auto;flex-wrap:wrap}
+.logo{margin:0;font-size:1.4rem;font-weight:800}
+.logo span{color:var(--ac)}
+input,textarea{background:var(--card2);color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;width:100%}
+input:focus,textarea:focus{outline:2px solid var(--ac);border-color:transparent}
+#search{flex:1;min-width:130px;width:auto}
+button{font:inherit;cursor:pointer}
+.ghost{background:var(--card2);color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.btn{background:linear-gradient(90deg,var(--ac),var(--ac2));color:var(--ac-tx);border:0;border-radius:12px;padding:10px 18px;font-weight:700;display:inline-block}
+.btn.ghost{background:var(--card2);color:var(--tx);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0;max-width:760px;margin:auto;scrollbar-width:none}
+.chip{white-space:nowrap;background:var(--card);color:var(--mut);border:1px solid var(--line);border-radius:99px;padding:4px 14px;font-weight:600}
+.chip.on{background:var(--ac);color:var(--ac-tx);border-color:var(--ac);font-weight:700}
+main{max-width:760px;margin:16px auto;padding:0 14px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:14px}
+.composer .chips{padding-top:0}
+.composer textarea{margin:6px 0 10px;resize:vertical}
+#fileBox{margin-bottom:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#preview{width:100%}
+#preview img{max-width:100%;max-height:220px;border-radius:12px}
+#preview audio,.media audio{width:100%}
+.progress{height:6px;background:var(--line);border-radius:9px;margin-bottom:10px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--ac);transition:width .2s}
+.muted{color:var(--mut);font-size:.85rem}
+.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.user-row{display:flex;align-items:center;gap:10px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--ac);color:#000;font-weight:800;display:grid;place-items:center}
+.who{font-weight:700}
+.badge{font-size:.75rem;color:var(--ac);border:1px solid var(--line);border-radius:99px;padding:0 8px;margin-inline-start:6px}
+.body{white-space:pre-wrap;word-break:break-word;margin:8px 0 10px}
+.media img{width:100%;max-height:450px;object-fit:contain;background:#000;border-radius:12px;display:block}
+.media iframe{width:100%;height:420px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.file{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--card2);padding:8px 12px;border-radius:12px}
+.file a,.file button{color:var(--ac);text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:4px 12px;background:transparent}
+.acts{display:flex;gap:10px;margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+.acts button{background:var(--card2);border:1px solid var(--line);color:var(--tx);border-radius:99px;padding:4px 14px}
+.acts .liked{color:#f43f5e;border-color:#f43f5e;font-weight:700}
+.comments{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+.cm{background:var(--card2);border-radius:12px;padding:6px 12px;margin-bottom:6px;font-size:.92rem}
+.cm b{color:var(--ac)}
+.cform{display:flex;gap:6px;margin-top:6px}
+.empty{text-align:center;color:var(--mut);padding:40px 0}
+.authwrap{min-height:100vh;display:grid;place-items:center;padding:16px}
+.authcard{width:min(100%,400px);display:grid;gap:10px;text-align:center}
+.authcard .chips{justify-content:center}
+.err{color:var(--danger);font-size:.9rem;min-height:1.4em}
+#banner{background:var(--ac);color:#000;padding:10px 14px;text-align:center;font-weight:700;display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:grid;place-items:center;padding:16px;z-index:99}
+.modal-box{width:min(100%,460px);display:grid;gap:10px;text-align:right}
+</style>
+</head>
+<body>
+<div id="banner" hidden>
+  <span id="bannerTxt"></span>
+  <button type="button" id="openCfgBtn" class="ghost" style="background:#000;color:#ffd700;border:0;padding:4px 12px">⚙️ إعداد السيرفر (Firebase)</button>
+</div>
+
+<!-- نافذة إعداد Firebase مباشرة من المتصفح -->
+<div id="cfgModal" class="modal" hidden>
+  <div class="card modal-box">
+    <h3 style="margin:0;color:var(--ac)">⚙️ ربط الموقع مع Firebase (أونلاين)</h3>
+    <p class="muted" style="margin:0">الصق كود <b>firebaseConfig</b> هنا (أو JSON) باش يتصل الموقع بالسيرفر ديالك مباشرة بلا ما تعدل الكود:</p>
+    <textarea id="cfgInput" dir="ltr" rows="7" placeholder='const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
+};'></textarea>
+    <div id="cfgErr" class="err"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button type="button" class="ghost" id="closeCfgBtn">إغلاق</button>
+      <button type="button" class="btn" id="saveCfgBtn">حفظ وتشغيل ⚡</button>
+    </div>
+  </div>
+</div>
+
+<!-- شاشة الدخول الحقيقية -->
+<section id="auth" class="authwrap">
+  <form class="card authcard" id="authForm">
+    <h1 class="logo">⚡ Dark <span>Power</span></h1>
+    <p class="muted" style="margin:0">شبكة التواصل الخاصة بالأصدقاء</p>
+    <div class="chips">
+      <button type="button" class="chip on" data-m="login">دخول</button>
+      <button type="button" class="chip" data-m="signup">حساب جديد</button>
+    </div>
+    <input id="u" dir="ltr" autocomplete="username" placeholder="Username (e.g. taoufik)">
+    <input id="pw" dir="ltr" type="password" autocomplete="current-password" placeholder="Password (6+ chars)">
+    <div id="authErr" class="err"></div>
+    <button type="submit" class="btn" id="authBtn">دخول</button>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button type="button" class="ghost themeBtn">🌓 تبديل المظهر</button>
+      <button type="button" class="ghost" id="cfgBtn2">⚙️ إعدادات الربط</button>
+    </div>
+  </form>
+</section>
+
+<!-- التطبيق -->
+<div id="appRoot" hidden>
+  <header class="top">
+    <div class="bar">
+      <h1 class="logo">⚡ Dark <span>Power</span></h1>
+      <input id="search" type="search" placeholder="ابحث في المنشورات…">
+      <span class="muted">👤 <b id="nameLbl"></b></span>
+      <button type="button" class="ghost themeBtn" title="تبديل الوضع">🌓</button>
+      <button type="button" id="outBtn" class="ghost" title="خروج">🚪</button>
+    </div>
+    <nav class="chips" id="filters">
+      <button type="button" class="chip on" data-f="all">الكل</button>
+      <button type="button" class="chip" data-f="text">📝 نصوص</button>
+      <button type="button" class="chip" data-f="image">🖼️ صور</button>
+      <button type="button" class="chip" data-f="audio">🎙️ صوتيات</button>
+      <button type="button" class="chip" data-f="pdf">📄 ملفات PDF</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card composer">
+      <div class="chips" id="types">
+        <button type="button" class="chip on" data-t="text">📝 نص</button>
+        <button type="button" class="chip" data-t="image">🖼️ صورة</button>
+        <button type="button" class="chip" data-t="audio">🎙️ أوديو</button>
+        <button type="button" class="chip" data-t="pdf">📄 PDF</button>
+      </div>
+      <textarea id="text" rows="3" placeholder="شنو باغي تبارطاجي مع الدراري؟"></textarea>
+      <div id="fileBox" hidden>
+        <label class="btn ghost" for="file">📎 اختر ملفًا</label>
+        <input id="file" type="file" hidden>
+        <button type="button" id="recBtn" class="btn ghost" hidden>⏺️ تسجيل أوديو</button>
+        <span id="fileName" class="muted"></span>
+        <div id="preview"></div>
+      </div>
+      <div class="progress" id="prog" hidden><i id="progBar"></i></div>
+      <button type="button" id="post" class="btn">نشر المنشور ⚡</button>
+    </section>
+
+    <section id="feed"></section>
+  </main>
+</div>
+
+<!-- مكتبات Firebase الرسمية -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+
+<script>
+/* =================================================================
+   👇 إعدادات مشروعك من Firebase (تقدر تحطها هنا أو من زر الإعدادات فالموقع) 👇
+   ================================================================= */
+const defaultFirebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "000000000000",
+  appId: "YOUR_APP_ID"
+};
+/* ================================================================= */
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const LS = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } };
+
+// تبديل المظهر
+document.documentElement.dataset.theme = LS("dp_theme") || "dark";
+document.querySelectorAll(".themeBtn").forEach(b => b.onclick = () => {
+  const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = t; LS("dp_theme", t);
+});
+
+// نافذة إعداد Firebase بدون الحاجة لتعديل الكود
+function parseFirebaseInput(raw) {
+  const keys = ["apiKey", "authDomain", "projectId", "storageBucket", "messagingSenderId", "appId"];
+  const out = {};
+  for (const k of keys) {
+    const m = raw.match(new RegExp(k + '\\s*:\\s*["\']([^"\']+)["\']'));
+    if (m) out[k] = m[1];
+  }
+  return (out.apiKey && out.projectId) ? out : null;
+}
+
+$("#openCfgBtn").onclick = () => { $("#cfgModal").hidden = false; };
+$("#cfgBtn2").onclick = () => { $("#cfgModal").hidden = false; };
+$("#closeCfgBtn").onclick = () => { $("#cfgModal").hidden = true; };
+$("#saveCfgBtn").onclick = () => {
+  const parsed = parseFirebaseInput($("#cfgInput").value);
+  if (!parsed) {
+    $("#cfgErr").textContent = "تأكد أنك نسخت كود firebaseConfig كامل من Firebase!";
+    return;
+  }
+  LS("dp_fb_config", JSON.stringify(parsed));
+  location.reload();
+};
+
+// تهيئة Firebase
+let auth = null, db = null, storage = null, ready = false;
+let activeConfig = defaultFirebaseConfig;
+try {
+  const savedCfg = JSON.parse(LS("dp_fb_config") || "null");
+  if (savedCfg && savedCfg.apiKey) activeConfig = savedCfg;
+} catch (e) {}
+
+if (activeConfig.apiKey === "YOUR_API_KEY") {
+  $("#bannerTxt").textContent = "⚠️ باش يخدم الموقع أونلاين مع صحابك: كليكي على (إعداد السيرفر) ولصق firebaseConfig ديالك.";
+  $("#banner").hidden = false;
+} else {
+  try {
+    firebase.initializeApp(activeConfig);
+    auth = firebase.auth();
+    db = firebase.firestore();
+    storage = firebase.storage();
+    ready = true;
+  } catch (e) {
+    $("#bannerTxt").textContent = "⚠️ خطأ في إعدادات Firebase: كليكي على إعداد السيرفر لتصحيحها.";
+    $("#banner").hidden = false;
+  }
+}
+
+// ---- تسجيل الدخول وإنشاء الحساب الحقيقي ----
+let mode = "login", uid = "", name = "", unsub = null;
+
+document.querySelectorAll("[data-m]").forEach(b => b.onclick = () => {
+  mode = b.dataset.m;
+  document.querySelectorAll("[data-m]").forEach(x => x.classList.toggle("on", x === b));
+  $("#authBtn").textContent = mode === "login" ? "دخول" : "إنشاء حساب جديد";
+  $("#authErr").textContent = "";
+});
+
+const AUTH_ERR = {
+  "auth/email-already-in-use": "هاد الاسم واخدو شي واحد من الدراري، اختار اسم آخر",
+  "auth/invalid-credential": "الاسم أو كلمة السر غالطة",
+  "auth/user-not-found": "هاد الحساب ما كاينش، كليكي على (حساب جديد) أولاً",
+  "auth/wrong-password": "كلمة السر غالطة",
+  "auth/weak-password": "كلمة السر خاص تكون فيها 6 حروف أو أرقام على الأقل",
+  "auth/operation-not-allowed": "خاصك تفعل Email/Password في Firebase Authentication"
+};
+
+$("#authForm").onsubmit = async e => {
+  e.preventDefault();
+  const err = $("#authErr"); err.textContent = "";
+  if (!ready) {
+    $("#cfgModal").hidden = false;
+    return err.textContent = "خاصك تحط firebaseConfig ديالك أولاً!";
+  }
+  const u = $("#u").value.trim().toLowerCase();
+  const p = $("#pw").value;
+  if (!/^[a-z0-9_]{3,20}$/.test(u)) return err.textContent = "الاسم خاص يكون بالحروف الإنجليزية أو أرقام (من 3 لـ 20 حرف)";
+  if (p.length < 6) return err.textContent = "كلمة السر على الأقل 6 حروف أو أرقام";
+
+  const mail = u + "@darkpower.app";
+  $("#authBtn").disabled = true;
+  try {
+    if (mode === "signup") {
+      const c = await auth.createUserWithEmailAndPassword(mail, p);
+      await c.user.updateProfile({ displayName: u });
+    } else {
+      await auth.signInWithEmailAndPassword(mail, p);
+    }
+  } catch (x) {
+    err.textContent = AUTH_ERR[x.code] || ("خطأ: " + x.message);
+  }
+  $("#authBtn").disabled = false;
+};
+
+$("#outBtn").onclick = () => auth && auth.signOut();
+
+if (auth) {
+  auth.onAuthStateChanged(user => {
+    $("#auth").hidden = !!user;
+    $("#appRoot").hidden = !user;
+    if (user) {
+      uid = user.uid;
+      name = user.displayName || user.email.split("@")[0];
+      $("#nameLbl").textContent = name;
+      listen();
+    } else {
+      if (unsub) unsub();
+      unsub = null; posts = []; uid = ""; $("#pw").value = "";
+    }
+  });
+}
+
+// ---- إعداد المنشورات والملفات ----
+let type = "text", file = null, recorder = null, posts = [], filter = "all", term = "";
+const ACCEPT = { pdf: "application/pdf", image: "image/*", audio: "audio/*" };
+const MAX = 25 * 1024 * 1024;
+
+function setType(t) {
+  type = t; file = null; stopRec();
+  document.querySelectorAll("#types .chip").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+  $("#fileBox").hidden = (t === "text");
+  $("#recBtn").hidden = (t !== "audio");
+  $("#file").accept = ACCEPT[t] || "";
+  $("#file").value = ""; $("#fileName").textContent = ""; $("#preview").innerHTML = "";
+}
+$("#types").onclick = e => {
+  const b = e.target.closest("[data-t]");
+  if (b) setType(b.dataset.t);
+};
+
+function setFile(f) {
+  if (f.size > MAX) return alert("الحد الأقصى لحجم الملف 25MB");
+  file = f; $("#fileName").textContent = f.name;
+  const url = URL.createObjectURL(f);
+  $("#preview").innerHTML = type === "image" ? `<img src="${url}">` : type === "audio" ? `<audio controls src="${url}"></audio>` : "";
+}
+$("#file").onchange = e => e.target.files[0] && setFile(e.target.files[0]);
+
+// ---- تسجيل الأوديو (Vocal) ----
+function stopRec() { if (recorder && recorder.state !== "inactive") recorder.stop(); }
+$("#recBtn").onclick = async () => {
+  if (recorder && recorder.state === "recording") return recorder.stop();
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const chunks = [];
+    recorder = new MediaRecorder(stream);
+    recorder.ondataavailable = e => chunks.push(e.data);
+    recorder.onstop = () => {
+      stream.getTracks().forEach(t => t.stop());
+      const mime = recorder.mimeType || "audio/webm", ext = mime.includes("mp4") ? "m4a" : "webm";
+      setFile(new File([new Blob(chunks, { type: mime })], `vocal-${Date.now()}.${ext}`, { type: mime }));
+      $("#recBtn").textContent = "⏺️ تسجيل أوديو";
+    };
+    recorder.start();
+    $("#recBtn").textContent = "⏹️ إيقاف التسجيل";
+  } catch (e) {
+    alert("خاصك تعطي صلاحية الميكروفون للمتصفح باش تسجل أوديو.");
+  }
+};
+
+// ---- نشر المنشور الحقيقي لـ Firebase ----
+$("#post").onclick = async () => {
+  if (!ready || !uid) return;
+  const text = $("#text").value.trim();
+  if (type === "text" ? !text : !file) return alert(type === "text" ? "كتب شي حاجة بعدا!" : "ختار الملف أو سجل أوديو بعدا!");
+  const btn = $("#post"); btn.disabled = true;
+  try {
+    let fileUrl = null, fileName = null;
+    if (file) {
+      const r = storage.ref(`uploads/${type}/${Date.now()}_${file.name.replace(/[^\w.\-]/g, "_")}`);
+      $("#prog").hidden = false;
+      await new Promise((ok, no) => {
+        const t = r.put(file);
+        t.on("state_changed", s => $("#progBar").style.width = (s.bytesTransferred / s.totalBytes * 100) + "%", no, ok);
+      });
+      fileUrl = await r.getDownloadURL();
+      fileName = file.name;
+    }
+    await db.collection("posts").add({
+      type, text, fileUrl, fileName,
+      author: name, uid,
+      likes: [], comments: [],
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    $("#text").value = ""; setType(type);
+  } catch (err) {
+    console.error(err);
+    alert("وقع مشكل فالنشر: تأكد أنك مفعل Firestore و Storage فـ Test mode.");
+  }
+  btn.disabled = false; $("#prog").hidden = true; $("#progBar").style.width = 0;
+};
+
+// ---- الفلترة والبحث ----
+$("#filters").onclick = e => {
+  const b = e.target.closest("[data-f]");
+  if (!b) return;
+  filter = b.dataset.f;
+  document.querySelectorAll("#filters .chip").forEach(x => x.classList.toggle("on", x === b));
+  render();
+};
+$("#search").oninput = e => { term = e.target.value.trim().toLowerCase(); render(); };
+
+// ---- عرض المنشورات والتفاعل (Likes & Comments) ----
+const BADGE = { text: "نص", pdf: "PDF", image: "صورة", audio: "أوديو" };
+const open = new Set();
+
+function card(p) {
+  const likes = p.likes || [], cms = p.comments || [];
+  const date = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleString("ar-MA", { dateStyle: "medium", timeStyle: "short" }) : "الآن";
+  let media = "";
+  if (p.type === "image" && p.fileUrl) media = `<div class="media"><img loading="lazy" src="${esc(p.fileUrl)}" alt=""></div>`;
+  if (p.type === "audio" && p.fileUrl) media = `<div class="media"><audio controls preload="none" src="${esc(p.fileUrl)}"></audio></div>`;
+  if (p.type === "pdf" && p.fileUrl) media = `<div class="file">📄 <span>${esc(p.fileName)}</span>
+    <button type="button" data-a="pdf">👁️ معاينة</button><a href="${esc(p.fileUrl)}" target="_blank" rel="noopener">⬇️ تحميل</a></div><div class="media" data-pv hidden></div>`;
+
+  const liked = likes.includes(uid);
+  const initial = (p.author || "U")[0].toUpperCase();
+
+  return `<article class="card" data-id="${p.id}">
+    <div class="head">
+      <div class="user-row">
+        <div class="avatar">${esc(initial)}</div>
+        <div>
+          <span class="who">${esc(p.author)}</span>
+          <span class="badge">${BADGE[p.type] || "نص"}</span>
+          <div class="muted">${date}</div>
+        </div>
+      </div>
+      ${p.uid === uid ? `<button type="button" class="ghost" data-a="del" title="حذف">🗑️</button>` : ""}
+    </div>
+    ${p.text ? `<div class="body">${esc(p.text)}</div>` : ""}${media}
+    <div class="acts">
+      <button type="button" data-a="like" class="${liked ? "liked" : ""}">${liked ? "❤️" : "🤍"} ${likes.length}</button>
+      <button type="button" data-a="cm">💬 تعليقات (${cms.length})</button>
+    </div>
+    <div class="comments" ${open.has(p.id) ? "" : "hidden"}>
+      ${cms.map(c => `<div class="cm"><b>${esc(c.author)}</b>: ${esc(c.text)}</div>`).join("")}
+      <div class="cform"><input data-ci placeholder="كتب تعليق للدراري…" maxlength="500"><button type="button" class="btn" data-a="send">إرسال</button></div>
+    </div>
+  </article>`;
+}
+
+function render() {
+  const drafts = {};
+  document.querySelectorAll("[data-ci]").forEach(i => { if (i.value) drafts[i.closest("article").dataset.id] = i.value; });
+  const list = posts.filter(p => (filter === "all" || p.type === filter) && (!term || ((p.text || "") + " " + (p.fileName || "") + " " + p.author).toLowerCase().includes(term)));
+  $("#feed").innerHTML = list.length ? list.map(card).join("") : `<div class="empty">ما كاين حتى منشور دابا، كون نتا أول واحد يبارطاجي! ⚡</div>`;
+  for (const id in drafts) { const i = document.querySelector(`[data-id="${id}"] [data-ci]`); if (i) i.value = drafts[id]; }
+}
+
+$("#feed").onclick = e => {
+  const a = e.target.closest("[data-a]")?.dataset.a; if (!a || !ready) return;
+  const art = e.target.closest("article"), id = art.dataset.id, p = posts.find(x => x.id === id);
+  const d = db.collection("posts").doc(id);
+
+  if (a === "like") {
+    const hasLiked = (p.likes || []).includes(uid);
+    d.update({ likes: hasLiked ? firebase.firestore.FieldValue.arrayRemove(uid) : firebase.firestore.FieldValue.arrayUnion(uid) });
+  }
+  if (a === "cm") {
+    open.has(id) ? open.delete(id) : open.add(id);
+    art.querySelector(".comments").hidden = !open.has(id);
+  }
+  if (a === "del" && confirm("واش متأكد باغي تمسح هاد المنشور؟")) d.delete();
+  if (a === "pdf") {
+    const pv = art.querySelector("[data-pv]"); pv.hidden = !pv.hidden;
+    pv.innerHTML = pv.hidden ? "" : `<iframe src="https://docs.google.com/gview?embedded=1&url=${encodeURIComponent(p.fileUrl)}"></iframe>`;
+  }
+  if (a === "send") {
+    const inp = art.querySelector("[data-ci]"), t = inp.value.trim(); if (!t) return;
+    open.add(id); inp.value = "";
+    d.update({ comments: firebase.firestore.FieldValue.arrayUnion({ author: name, text: t, ts: Date.now(), uid }) });
+  }
+};
+$("#feed").onkeydown = e => { if (e.key === "Enter" && e.target.matches("[data-ci]")) e.target.nextElementSibling.click(); };
+
+function listen() {
+  if (unsub) unsub();
+  unsub = db.collection("posts").orderBy("createdAt", "desc").onSnapshot(
+    s => { posts = s.docs.map(d => ({ id: d.id, ...d.data() })); render(); },
+    err => { console.error(err); $("#feed").innerHTML = `<div class="empty">تعذر جلب المنشورات — تأكد من تفعيل Firestore Database فـ Firebase.</div>`; }
+  );
+}
+
+setType("text");
+</script>
+</body>
+</html>
